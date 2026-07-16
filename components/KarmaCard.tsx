@@ -3,10 +3,14 @@
 import { useState } from "react";
 import { haptic } from "@/lib/audio";
 import { useSandhya } from "@/lib/store";
+import { CURRICULUM, trackProgress } from "@/lib/curriculum";
+import type { FocusTag } from "@/lib/types";
 
-export default function KarmaCard({ onOpenForge }: { onOpenForge: () => void }) {
+export default function KarmaCard({ onFocus, onOpenPath }: { onFocus: (tag: FocusTag) => void; onOpenPath: () => void }) {
   const { today, patchToday, logLeet, state } = useSandhya();
   const [logging, setLogging] = useState(false);
+  const cppP = trackProgress(CURRICULUM[0], state.curriculum);
+  const archP = trackProgress(CURRICULUM[1], state.curriculum);
 
   const toggle = (key: "architect" | "kpit") => {
     patchToday({ [key]: !today[key] } as any);
@@ -26,13 +30,27 @@ export default function KarmaCard({ onOpenForge }: { onOpenForge: () => void }) 
         <p className="text-white/50 text-xs">The 6-hour block, honored. Mentoring your replacement counts here too.</p>
       </header>
 
+      {/* The Path — curriculum tracker */}
+      <button
+        onClick={onOpenPath}
+        className="w-full rounded-2xl py-3 px-4 mb-2 flex items-center justify-between border border-white/15 bg-white/5 active:scale-[0.99] transition"
+      >
+        <div className="text-left">
+          <div className="text-sm text-white/90 font-medium">🗺 The Path — course map</div>
+          <div className="text-[11px] text-white/50">
+            Blade {Math.round(cppP.pct * 100)}% · Temple {Math.round(archP.pct * 100)}% — tap to check off lessons
+          </div>
+        </div>
+        <span className="text-white/70 text-sm">Open →</span>
+      </button>
+
       {/* Forge */}
       <button
-        onClick={onOpenForge}
+        onClick={() => onFocus("cpp")}
         className="w-full rounded-2xl py-3 px-4 mb-2 flex items-center justify-between border border-orange-300/40 bg-gradient-to-r from-orange-500/20 to-orange-400/5 active:scale-[0.99] transition"
       >
         <div className="text-left">
-          <div className="text-sm text-orange-50 font-medium">🔥 The Forge — C++</div>
+          <div className="text-sm text-orange-50 font-medium">🔥 The Forge — C++ (Pomodoro)</div>
           <div className="text-[11px] text-orange-200/60">
             {today.forgeHeats} heats · {today.gritSparks} grit sparks today
           </div>
@@ -40,15 +58,23 @@ export default function KarmaCard({ onOpenForge }: { onOpenForge: () => void }) 
         <span className="text-orange-100/80 text-sm">Enter →</span>
       </button>
 
-      <button
-        onClick={() => toggle("architect")}
-        className={`w-full rounded-2xl py-3 px-4 mb-2 flex items-center justify-between border transition active:scale-[0.99] ${
-          today.architect ? "bg-amber-300/15 border-amber-200/40" : "bg-white/5 border-white/15"
-        }`}
-      >
-        <span className="text-sm text-white/85">📐 Architect track</span>
-        <span className="text-lg">{today.architect ? "✅" : "○"}</span>
-      </button>
+      <div className="flex gap-2 mb-2">
+        <button
+          onClick={() => toggle("architect")}
+          className={`flex-1 rounded-2xl py-3 px-3 flex items-center justify-between border transition active:scale-[0.99] ${
+            today.architect ? "bg-amber-300/15 border-amber-200/40" : "bg-white/5 border-white/15"
+          }`}
+        >
+          <span className="text-sm text-white/85">📐 Architect</span>
+          <span className="text-lg">{today.architect ? "✅" : "○"}</span>
+        </button>
+        <button
+          onClick={() => onFocus("arch")}
+          className="shrink-0 rounded-2xl px-4 border border-indigo-300/30 bg-indigo-400/10 text-indigo-50 text-sm active:scale-95"
+        >
+          ▷ focus
+        </button>
+      </div>
 
       {/* Sparring ring — LeetCode */}
       <div className="rounded-2xl border border-white/15 bg-white/5 p-3 mb-2">
@@ -59,12 +85,17 @@ export default function KarmaCard({ onOpenForge }: { onOpenForge: () => void }) 
               {today.leetSolved}/2 solved · Craft Rating <span className="text-amber-200 font-medium">{state.craftRating}</span>
             </div>
           </div>
-          <button
-            onClick={() => setLogging((v) => !v)}
-            className="text-xs px-3 py-1.5 rounded-full bg-white/10 text-white/80 active:scale-95"
-          >
-            {logging ? "Cancel" : "Log a spar"}
-          </button>
+          <div className="flex gap-1.5">
+            <button onClick={() => onFocus("leet")} className="text-xs px-3 py-1.5 rounded-full bg-emerald-400/15 border border-emerald-300/30 text-emerald-50 active:scale-95">
+              ▷ focus
+            </button>
+            <button
+              onClick={() => setLogging((v) => !v)}
+              className="text-xs px-3 py-1.5 rounded-full bg-white/10 text-white/80 active:scale-95"
+            >
+              {logging ? "Cancel" : "Log a spar"}
+            </button>
+          </div>
         </div>
 
         {logging && (

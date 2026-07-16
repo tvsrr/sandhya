@@ -17,9 +17,20 @@ export interface DayRecord {
   pagesRead: number;
   journal: string;
   stress: StressMood | null;
+  // focus / pomodoro — minutes logged per domain today
+  focusLog: Record<string, number>;
   // meta
   poured: boolean;
   lampBurned: boolean;
+}
+
+export type FocusTag = "cpp" | "arch" | "leet" | "read" | "kpit";
+
+export interface PomodoroSettings {
+  work: number; // minutes
+  short: number;
+  long: number;
+  rounds: number; // work rounds before a long break
 }
 
 export type RewardKind = "warm" | "lamp" | "relic" | "thread";
@@ -44,5 +55,7 @@ export interface SandhyaState {
   soundOn: boolean;
   compilerCards: string[]; // collected "Compiler Speaks" lines
   seenMilestones: number[]; // day indexes celebrated
+  curriculum: Record<string, boolean>; // lesson id -> completed
+  pomodoro: PomodoroSettings;
   version: number;
 }

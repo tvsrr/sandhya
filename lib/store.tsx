@@ -1,7 +1,7 @@
 "use client";
 
 import React, { createContext, useContext, useEffect, useMemo, useRef, useState } from "react";
-import type { DayRecord, RewardResult, SandhyaState, StressMood, WakePath } from "./types";
+import type { DayRecord, FocusTag, PomodoroSettings, RewardResult, SandhyaState, StressMood, WakePath } from "./types";
 import { TOTAL_DAYS } from "./sky";
 import { drawReward, segmentsClosed } from "./rewards";
 
@@ -37,6 +37,7 @@ function emptyDay(date: string): DayRecord {
     pagesRead: 0,
     journal: "",
     stress: null,
+    focusLog: {},
     poured: false,
     lampBurned: false,
   };
@@ -56,6 +57,8 @@ function initialState(): SandhyaState {
     soundOn: true,
     compilerCards: [],
     seenMilestones: [],
+    curriculum: {},
+    pomodoro: { work: 25, short: 5, long: 15, rounds: 4 },
     version: 1,
   };
 }
@@ -74,6 +77,9 @@ interface SandhyaCtx {
   patchToday: (patch: Partial<DayRecord>) => void;
   addGritSpark: () => number; // returns new count (capped 3/session handled in UI)
   completeHeat: () => void;
+  logFocus: (tag: FocusTag, minutes: number) => void;
+  toggleLesson: (id: string) => void;
+  setPomodoro: (patch: Partial<PomodoroSettings>) => void;
   logLeet: (difficulty: "easy" | "medium" | "hard", usedHints: boolean) => void;
   setWakePath: (p: WakePath) => void;
   setStress: (m: StressMood) => void;
@@ -175,6 +181,20 @@ export function SandhyaProvider({ children }: { children: React.ReactNode }) {
         const cur = s.days[todayK] ?? emptyDay(todayK);
         return patchTodayRaw(s, { forgeHeats: cur.forgeHeats + 1 });
       }),
+
+    logFocus: (tag, minutes) =>
+      update((s) => {
+        const cur = s.days[todayK] ?? emptyDay(todayK);
+        const log = { ...(cur.focusLog ?? {}) };
+        log[tag] = (log[tag] ?? 0) + minutes;
+        return patchTodayRaw(s, { focusLog: log });
+      }),
+
+    toggleLesson: (id) =>
+      update((s) => ({ ...s, curriculum: { ...s.curriculum, [id]: !s.curriculum[id] } })),
+
+    setPomodoro: (patch) =>
+      update((s) => ({ ...s, pomodoro: { ...s.pomodoro, ...patch } })),
 
     logLeet: (difficulty, usedHints) =>
       update((s) => {

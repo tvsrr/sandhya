@@ -10,16 +10,20 @@ import KarmaCard from "./KarmaCard";
 import ChittaCard from "./ChittaCard";
 import MoonWeek from "./MoonWeek";
 import DaysLit from "./DaysLit";
-import ForgeMode from "./ForgeMode";
+import Pomodoro from "./Pomodoro";
+import Path from "./Path";
 import ArghyaPour from "./ArghyaPour";
 import Settings from "./Settings";
 import Moments from "./Moments";
+import type { FocusTag } from "@/lib/types";
 
 export default function Dashboard() {
   const { today, dayIndex, progress, segmentsToday, state, toggleSound } = useSandhya();
-  const [forge, setForge] = useState(false);
+  const [focus, setFocus] = useState<{ open: boolean; tag: FocusTag }>({ open: false, tag: "cpp" });
+  const [path, setPath] = useState(false);
   const [pour, setPour] = useState(false);
   const [settings, setSettings] = useState(false);
+  const openFocus = (tag: FocusTag) => setFocus({ open: true, tag });
 
   const deha = today.gym && today.sandhya;
   const karma = today.forgeHeats >= 1 && today.architect && today.leetSolved >= 2;
@@ -69,8 +73,8 @@ export default function Dashboard() {
         {/* loops */}
         <div className="space-y-4">
           <DehaCard />
-          <KarmaCard onOpenForge={() => setForge(true)} />
-          <ChittaCard />
+          <KarmaCard onFocus={openFocus} onOpenPath={() => setPath(true)} />
+          <ChittaCard onFocus={() => openFocus("read")} />
           <MoonWeek />
           <DaysLit />
         </div>
@@ -81,7 +85,20 @@ export default function Dashboard() {
         </footer>
       </main>
 
-      <ForgeMode open={forge} onClose={() => setForge(false)} />
+      {/* floating focus launcher */}
+      {!focus.open && !pour && (
+        <button
+          onClick={() => openFocus("cpp")}
+          className="fixed bottom-5 right-4 z-40 w-14 h-14 rounded-full bg-orange-500 text-white text-xl flex items-center justify-center ember-glow active:scale-95 transition"
+          aria-label="Focus timer"
+          style={{ marginBottom: "env(safe-area-inset-bottom)" }}
+        >
+          ▷
+        </button>
+      )}
+
+      <Pomodoro open={focus.open} initialTag={focus.tag} onClose={() => setFocus((f) => ({ ...f, open: false }))} />
+      <Path open={path} onClose={() => setPath(false)} />
       {pour && <ArghyaPour open={pour} onClose={() => setPour(false)} />}
       <Settings open={settings} onClose={() => setSettings(false)} />
       <Moments />
