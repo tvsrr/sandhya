@@ -45,15 +45,15 @@ export default function ArghyaPour({ open, onClose }: { open: boolean; onClose: 
             </p>
             <button
               onClick={doPour}
-              className="mx-auto mb-6 flex items-center justify-center rounded-full active:scale-95 transition"
-              style={{
-                width: 150,
-                height: 150,
-                background: "radial-gradient(circle at 50% 40%, #ffcf6b 0%, #d97a3a 60%, #8a4326 100%)",
-                boxShadow: "0 0 40px rgba(255,180,90,0.5), inset 0 -10px 20px rgba(0,0,0,0.35)",
-              }}
+              className="mx-auto mb-6 flex items-center justify-center active:scale-95 transition"
+              style={{ width: 190, height: 190 }}
             >
-              <span className="text-4xl">🪔</span>
+              <img
+                src="/bowl.webp"
+                alt="offering bowl"
+                className="w-full h-full object-contain"
+                style={{ filter: "drop-shadow(0 6px 30px rgba(255,180,90,0.45))" }}
+              />
             </button>
             <p className="text-amber-100/70 text-sm">Tap the bowl to pour it into the horizon.</p>
           </>
@@ -96,12 +96,28 @@ function RewardCard({ reward }: { reward: RewardResult }) {
       ? "from-amber-200/25 to-orange-400/10 border-amber-200/50"
       : "from-white/15 to-white/5 border-white/25";
 
-  const glyph = reward.kind === "thread" ? "🧵" : reward.kind === "relic" ? "🃏" : reward.kind === "lamp" ? "🪔" : "🌾";
+  const glyph = reward.kind === "thread" ? "🧵" : reward.kind === "lamp" ? "diya" : "🌾";
+  const relicSrc =
+    reward.kind === "relic" && reward.relicId
+      ? `/relics/relic-${String(((reward.relicId - 1) % 10) + 1).padStart(2, "0")}.webp`
+      : null;
 
   return (
-    <div className={`rounded-2xl border bg-gradient-to-b ${accent} p-6 text-left`}>
-      <div className="flex items-center gap-2 mb-3">
-        <span className="text-2xl">{glyph}</span>
+    <div className={`rounded-2xl border bg-gradient-to-b ${accent} p-5 text-left`}>
+      {relicSrc && (
+        <img
+          src={relicSrc}
+          alt=""
+          className="w-40 mx-auto mb-4 rounded-lg shadow-2xl ring-1 ring-amber-200/40"
+          style={{ boxShadow: "0 8px 40px rgba(0,0,0,0.5)" }}
+        />
+      )}
+      <div className="flex items-center gap-2 mb-2">
+        {glyph === "diya" ? (
+          <img src="/diya-lit.webp" alt="" className="h-6 w-auto" />
+        ) : (
+          <span className="text-2xl">{glyph}</span>
+        )}
         <span className="text-white font-medium">{reward.title}</span>
       </div>
       <p className="text-white/85 text-sm whitespace-pre-line leading-relaxed">{reward.body}</p>

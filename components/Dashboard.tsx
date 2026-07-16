@@ -59,7 +59,7 @@ export default function Dashboard() {
         {/* pour the day */}
         <button
           onClick={() => setPour(true)}
-          className={`w-full rounded-2xl py-3 mb-4 border transition active:scale-[0.99] ${
+          className={`w-full rounded-2xl py-3 mb-4 border transition active:scale-[0.99] flex items-center justify-center gap-2 ${
             today.poured
               ? "bg-white/5 border-white/10 text-white/50"
               : allClosed
@@ -67,7 +67,8 @@ export default function Dashboard() {
               : "bg-white/8 border-white/15 text-white/80"
           }`}
         >
-          {today.poured ? "🪔 The day is offered · rest now" : allClosed ? "🪔 All three closed — offer the day" : "🪔 Offer the day (Arghya)"}
+          <img src="/diya-lit.webp" alt="" className="h-5 w-auto" style={{ opacity: today.poured ? 0.5 : 1 }} />
+          {today.poured ? "The day is offered · rest now" : allClosed ? "All three closed — offer the day" : "Offer the day (Arghya)"}
         </button>
 
         {/* loops */}

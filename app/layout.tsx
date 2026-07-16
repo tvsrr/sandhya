@@ -7,6 +7,11 @@ export const metadata: Metadata = {
   description:
     "A 75-day transformation compass. The threshold is the temple.",
   applicationName: "SANDHYA",
+  manifest: "/manifest.webmanifest",
+  icons: {
+    icon: "/favicon.png",
+    apple: "/apple-touch-icon.png",
+  },
   appleWebApp: {
     capable: true,
     statusBarStyle: "black-translucent",

@@ -91,7 +91,10 @@ export default function MoonWeek() {
         </button>
       </div>
       {held === 7 && (
-        <p className="text-[11px] text-ghee/90 mt-2 text-center">Full moon this week — a Ghee Lamp is yours. 🪔</p>
+        <p className="text-[11px] text-ghee/90 mt-2 text-center flex items-center justify-center gap-1">
+          Full moon this week — a Ghee Lamp is yours.
+          <img src="/diya-lit.webp" alt="" className="inline h-4 w-auto" />
+        </p>
       )}
     </section>
   );

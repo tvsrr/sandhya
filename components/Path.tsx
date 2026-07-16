@@ -43,15 +43,27 @@ function TrackView({ track, done }: { track: Track; done: Record<string, boolean
   const [openCourse, setOpenCourse] = useState<string | null>(null);
   const tp = trackProgress(track, done);
   const forged = track.courses.filter((c) => courseProgress(c, done).pct === 1).length;
+  const artifactSrc = track.id === "cpp" ? "/blade-full.webp" : "/temple-full.webp";
 
   return (
     <section className="card p-4">
-      <header className="mb-3">
-        <div className="flex items-center justify-between">
-          <h3 className="text-white font-medium">{track.name}</h3>
-          <span className="text-amber-200 text-sm font-medium">{Math.round(tp.pct * 100)}%</span>
+      <header className="mb-3 flex items-start gap-3">
+        <img
+          src={artifactSrc}
+          alt=""
+          className="h-16 w-auto shrink-0 transition"
+          style={{
+            opacity: 0.25 + tp.pct * 0.75,
+            filter: `saturate(${0.3 + tp.pct * 0.7}) drop-shadow(0 0 ${tp.pct * 10}px rgba(255,180,90,0.5))`,
+          }}
+        />
+        <div className="flex-1">
+          <div className="flex items-center justify-between">
+            <h3 className="text-white font-medium">{track.name}</h3>
+            <span className="text-amber-200 text-sm font-medium">{Math.round(tp.pct * 100)}%</span>
+          </div>
+          <p className="text-white/45 text-[11px]">{track.subtitle}</p>
         </div>
-        <p className="text-white/45 text-[11px]">{track.subtitle}</p>
       </header>
 
       {/* overall bar */}

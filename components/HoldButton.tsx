@@ -83,8 +83,13 @@ export default function HoldButton({
         </>
       )}
 
-      <div className="relative flex items-center justify-center gap-2">
-        <span className="text-lg">🪔</span>
+      <div className="relative flex items-center justify-center gap-2.5">
+        <img
+          src={done ? "/diya-lit.webp" : "/diya-unlit.webp"}
+          alt=""
+          className="h-7 w-auto object-contain"
+          style={{ filter: done ? "drop-shadow(0 0 8px rgba(255,180,90,0.6))" : "none" }}
+        />
         <span className={`text-sm font-medium ${done ? "text-amber-100" : "text-white/80"}`}>
           {done ? doneLabel : progress > 0 ? "keep holding…" : label}
         </span>

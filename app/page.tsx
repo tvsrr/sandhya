@@ -3,6 +3,7 @@
 import { useEffect, useState } from "react";
 import { useSandhya } from "@/lib/store";
 import Dashboard from "@/components/Dashboard";
+import { LetterMark, SunMark } from "@/components/Glyphs";
 
 export default function Page() {
   const { ready, state } = useSandhya();
@@ -31,12 +32,17 @@ function Onboarding() {
   const [letter, setLetter] = useState("");
 
   return (
-    <div className="min-h-screen flex flex-col" style={{ background: "linear-gradient(180deg,#121530 0%,#2a2350 55%,#5a3a52 100%)" }}>
+    <div className="relative min-h-screen flex flex-col" style={{ background: "linear-gradient(180deg,#121530 0%,#2a2350 55%,#5a3a52 100%)" }}>
+      {/* threshold scene backdrop */}
+      <div className="fixed inset-0 -z-10">
+        <img src="/scenes/threshold.webp" alt="" className="w-full h-full object-cover opacity-60" />
+        <div className="absolute inset-0" style={{ background: "linear-gradient(180deg, rgba(18,21,48,0.5) 0%, rgba(18,21,48,0.35) 40%, rgba(30,20,40,0.85) 100%)" }} />
+      </div>
       <div className="flex-1 flex flex-col items-center justify-center px-6 max-w-md mx-auto w-full text-center">
         {step === 0 && (
           <div className="animate-[breathe_0.6s_ease]">
-            <div className="text-6xl mb-4">🌄</div>
-            <h1 className="font-serif text-4xl text-white tracking-wide">SANDHYA</h1>
+            <div className="flex justify-center mb-4"><SunMark size={64} /></div>
+            <h1 className="font-serif text-4xl text-white tracking-wide ink-shadow">SANDHYA</h1>
             <p className="text-amber-100/70 mt-2 italic">Seventy-five dawns. One crossing.</p>
             <p className="text-white/70 text-sm leading-relaxed mt-8">
               You are living in a <span className="text-amber-100">sandhya</span> — the threshold between two lives. Your
@@ -58,7 +64,7 @@ function Onboarding() {
 
         {step === 1 && (
           <div className="animate-[breathe_0.6s_ease] w-full">
-            <div className="text-3xl mb-3">💌</div>
+            <div className="flex justify-center mb-3"><LetterMark size={48} /></div>
             <h2 className="font-serif text-2xl text-white mb-2">A letter across the threshold</h2>
             <p className="text-white/60 text-sm mb-5">
               Say something to the person on the other side — the you standing in full daylight on Day 75. You&apos;ll

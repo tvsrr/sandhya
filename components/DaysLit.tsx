@@ -61,7 +61,7 @@ export default function DaysLit() {
               border: f.type === "today" ? "1px solid rgba(255,220,150,0.7)" : "none",
             }}
           >
-            {f.type === "lamp" ? "🪔" : ""}
+            {f.type === "lamp" ? <img src="/diya-lit.webp" alt="lamp" className="w-full h-full object-contain p-0.5" /> : ""}
           </div>
         ))}
       </div>
