@@ -1,163 +1,113 @@
-# SANDHYA — Nano Banana asset prompts
+# SANDHYA — asset prompts (final)
 
-Generate these with Nano Banana (Gemini 2.5 Flash Image), then save each with the
-**exact filename** shown and drop them in the folder noted. I'll wire them in.
+Only the assets where an emoji is a real compromise. Generate with Nano Banana
+(Gemini 2.5 Flash Image), save with the **exact filename** shown, drop into the folder.
+I handle the rest (threshold-letter + mood glyphs) as inline SVG — you don't generate those.
 
-## How to keep the set consistent
-1. Generate **`icon`** (Tier 1) first — it sets the look.
-2. For every later image, keep the **same chat session** and start the prompt with:
-   *"In the exact same art style, palette and lighting as before —"* (and optionally
-   attach a previous image as reference). This is what makes the set feel like one app.
-3. Always request the stated **aspect ratio** and, where noted, **transparent background**.
-4. Every prompt already ends with the no-text rule — keep it; I render all words in-app.
+---
 
-## The house style (baked into every prompt below, don't remove)
+## ⚙️ Read this first — two kinds of image, two backgrounds
+
+**1. CUTOUT objects** (diya, bowl, blade, temple) — I remove the background in code, so:
+- Put the subject on a **flat, uniform, solid pure-magenta background, hex #FF00FF**, evenly
+  lit like a studio sweep. (Magenta never appears in this warm palette, so it keys out cleanly.)
+- **No** gradient, **no** ground plane, **no** shadow cast onto the background, **no** vignette.
+- Center the subject with **generous empty margin** on all sides (don't crop edges).
+- Keep any glow **tight to the object** — don't let light bleed into the magenta. I re-add
+  glow in-app with CSS, so a clean hard-ish edge is better than a soft halo.
+- Nothing in the subject itself may be magenta/hot-pink.
+
+**2. FULL-BLEED art** (app icon, relic cards, scenes) — keep its own background, fills the frame.
+
+---
+
+## 🎨 House style (in every prompt — don't remove)
 > Painterly digital illustration blending the warmth of Indian Pahari/Rajput miniature
-> painting with modern celestial editorial art. Soft volumetric dawn light, fine gold-leaf
-> linework, subtle paper grain, serene and sacred and contemplative. Strictly limited
-> palette: deep indigo (#141733), violet (#2e285c), rose (#964e5c), ember amber (#ff8c42),
-> warm gold (#ffcf6b), warm off-white (#fff8ee). No text, no letters, no numbers, no
-> signature, no watermark, no UI elements.
+> painting with modern celestial editorial art. Soft dawn light, fine gold-leaf linework,
+> subtle grain, serene and sacred. Strict palette: deep indigo #141733, violet #2e285c,
+> rose #964e5c, ember amber #ff8c42, warm gold #ffcf6b, warm off-white #fff8ee.
+> No text, no letters, no numbers, no signature, no watermark, no UI.
+
+**Consistency:** generate `icon` first, then for every later image keep the same chat and
+begin with *"In the exact same art style, palette and lighting as before —"*.
 
 ---
 
-# TIER 1 — must-have (the app is emoji-free once these land)
+# CUTOUT OBJECTS — flat magenta #FF00FF background
 
-### `public/icon.png` — app & home-screen icon · 1024×1024 · square
-> App icon in the SANDHYA house style (Indian miniature warmth + celestial editorial;
-> palette deep indigo→violet→rose→amber→gold, gold-leaf linework, soft grain). A single
-> serene emblem: a stylized sun cresting a flat horizon line, its rays as fine gold leaf,
-> a small band of stars fading in the indigo sky above. Centered, bold, simple enough to
-> read at 32px. Deep indigo-to-amber vertical gradient background, full-bleed (no
-> transparency). No text, no letters, no numbers, no watermark.
-
-### `public/diya-lit.png` — the ghee lamp, lit · 1024×1024 · **transparent background**
+### `public/diya-lit.png` · 1024×1024
 > A single traditional Indian clay diya (oil lamp) with a warm glowing flame, three-quarter
-> view, hand-painted miniature style with gold-leaf rim highlights. Soft amber-gold glow
-> radiating from the flame. Warm, sacred, calm. Isolated on a fully transparent background,
-> centered, no shadow plate. Palette indigo/rose/amber/gold. No text, no watermark.
+> view, hand-painted miniature style with gold-leaf rim. SANDHYA house style. Centered with
+> wide empty margin on a flat, evenly-lit solid pure-magenta (#FF00FF) studio background —
+> no gradient, no shadow on the background, keep the flame's glow tight to the lamp. No text.
 
-### `public/diya-unlit.png` — the ghee lamp, unlit · 1024×1024 · **transparent background**
-> The same traditional Indian clay diya as before, but unlit — no flame, cool and quiet,
-> a thin wick resting in the oil. Same three-quarter view, same miniature painting style
-> and gold rim, muted indigo-violet tones. Isolated on a fully transparent background,
-> centered. No text, no watermark.
+### `public/diya-unlit.png` · 1024×1024
+> In the same style and exact same lamp — but unlit, no flame, a quiet wick resting in the
+> oil, cooler muted indigo-violet tones, same gold rim. Same three-quarter view. Centered
+> with wide margin on a flat solid pure-magenta (#FF00FF) background, no shadow, no gradient.
 
-### `public/bowl.png` — the Arghya offering bowl · 1024×1024 · **transparent background**
-> A small handmade clay ritual bowl (arghya patra) holding a shallow pool of water that
-> catches golden dawn light, faint embers floating just above the surface. Three-quarter
-> top-down view, Indian miniature painting style with gold-leaf edge. Warm amber reflection
-> in the water. Isolated on a fully transparent background, centered. No text, no watermark.
+### `public/bowl.png` · 1024×1024
+> A small handmade clay ritual bowl (arghya patra) holding a shallow pool of water catching
+> golden dawn light, a few faint embers hovering just above the surface. Three-quarter
+> top-down view, miniature style with gold-leaf edge. SANDHYA house style. Centered with wide
+> margin on a flat solid pure-magenta (#FF00FF) background, no shadow, no gradient. No text.
 
-### `public/mood-light.png` `public/mood-even.png` `public/mood-heavy.png` — stress glyphs · 512×512 · **transparent**
-Generate as a set of three, same style, so they match:
-> Three minimalist celestial glyphs in a row, gold-leaf line-art on transparent background,
-> same style and stroke weight: (1) a light, unclouded rising sun; (2) a sun half-behind a
-> single flat cloud; (3) a sun fully behind heavy layered clouds. Simple, iconic, calm.
-> Export each separately, centered, transparent background. No text, no watermark.
+### `public/blade-full.png` · 1024×1536 (2:3)
+> An elegant hand-forged double-edged sword, vertical, tip up, faint warm glow along the
+> fuller, gold-inlaid guard and wrapped hilt, slightly imperfect and beautiful. Steel shifts
+> from cool indigo shadow to warm gold edge. SANDHYA house style. Centered vertically with
+> margin on a flat solid pure-magenta (#FF00FF) background, no shadow, no gradient. No text.
 
----
-
-# TIER 2 — the artifacts (Path view + Day 75 payoff)
-
-### `public/blade-full.png` — the finished Blade · 1024×1536 · **transparent background** · 2:3
-> An elegant forged double-edged sword shown vertically, tip up, faint warm glow along the
-> fuller, gold-inlaid guard and wrapped hilt. Hand-forged, slightly imperfect, beautiful.
-> Indian miniature + celestial style, gold-leaf detailing, amber highlights on steel that
-> shifts from cool indigo shadow to warm gold edge. Isolated on a fully transparent
-> background, centered vertically. No text, no watermark.
-
-### `public/temple-full.png` — the raised Temple · 1024×1536 · **transparent background** · 2:3
-> A serene South-Indian stone temple at dawn — a stepped base (foundation), rows of carved
-> pillars, a vaulted sanctum, and a tall tapering spire (gopuram/shikhara) crowned with a
-> point of golden light. Rendered in warm Indian miniature style with gold-leaf edges,
-> catching amber sunrise on one side and cool indigo shadow on the other. Isolated on a
-> fully transparent background, centered. No text, no watermark.
+### `public/temple-full.png` · 1024×1536 (2:3)
+> A serene South-Indian stone temple at dawn: stepped base, rows of carved pillars, a vaulted
+> sanctum, and a tall tapering spire (shikhara) crowned with a point of golden light. Warm
+> miniature style, gold-leaf edges, amber sunrise on one side, indigo shadow on the other.
+> SANDHYA house style. Centered with margin on a flat solid pure-magenta (#FF00FF) background,
+> no shadow, no gradient. No text.
 
 ---
 
-# TIER 3 — Relic cards ("The Crossing") · each 900×1200 · 3:4 portrait, full-bleed
-These are collectible oracle-style cards. **Same style, thin ornate gold-leaf inner border,
-dawn palette, NO text or numbers on the card** (I add the name under it in the app). Generate
-each on its own; keep the session consistent so the set matches.
+# FULL-BLEED ART — keep the background
 
-- `public/relics/relic-01.png` — *The Open Door in a Field*
-  > Oracle card: a simple wooden door standing open and free-floating in a vast dawn meadow,
-  > warm golden light spilling through it onto the grass, indigo sky with a few fading stars.
-- `public/relics/relic-02.png` — *The First Star Over the Anvil*
-  > Oracle card: a blacksmith's anvil on dark ground at dusk, a single bright silver star
-  > rising directly above it, faint ember glow at the anvil's base.
-- `public/relics/relic-03.png` — *The Ferryman's Lantern*
-  > Oracle card: a small wooden boat on still dark water at pre-dawn, a warm lantern hanging
-  > from its prow casting gold reflections, distant amber horizon.
-- `public/relics/relic-04.png` — *The Threshold Stone*
-  > Oracle card: a weathered carved stone doorstep / threshold marker at the entrance of an
-  > unseen home, first sunrise light grazing its worn surface, gold-leaf accents.
-- `public/relics/relic-05.png` — *The Blade Half-Drawn*
-  > Oracle card: an elegant sword being half-drawn from an ornate scabbard, warm light
-  > running along the exposed steel, indigo-to-amber gradient background.
-- `public/relics/relic-06.png` — *The Waxing Moon Over Water*
-  > Oracle card: a luminous waxing gibbous moon reflected on calm night water, violet and
-  > indigo sky, a thin band of rose at the horizon.
-- `public/relics/relic-07.png` — *The Cupped Hands of Dawn*
-  > Oracle card: two open cupped hands lifted in offering, water and golden light pouring
-  > from them toward a rising sun, sacred and gentle, miniature-painting hands.
-- `public/relics/relic-08.png` — *The Long Shadow Walking East*
-  > Oracle card: a lone robed figure seen from behind walking toward a golden sunrise on a
-  > wide plain, casting a long shadow behind them, hopeful and quiet.
-- `public/relics/relic-09.png` — *The Ember That Would Not Die*
-  > Oracle card: a single glowing ember resting in grey ash in near-darkness, refusing to go
-  > out, a soft halo of warm amber light around it.
-- `public/relics/relic-10.png` — *The Sun Caught in the Doorframe*
-  > Oracle card: a stone doorway framing a full golden sunrise perfectly within it, warm
-  > light flooding through onto a dark floor, threshold imagery.
+### `public/icon.png` — app / home-screen icon · 1024×1024
+> App icon, SANDHYA house style. A single serene emblem: a stylized sun cresting a flat
+> horizon line, rays as fine gold leaf, a few stars fading in the indigo sky above. Centered,
+> bold, readable at 32px. Full-bleed deep-indigo→amber vertical gradient background. No text.
 
-*(For each, prepend: "Oracle/tarot-style portrait card, thin ornate gold-leaf inner border,
-SANDHYA house style, palette indigo/violet/rose/amber/gold, soft grain, no text, no numbers,
-no watermark —")*
+### Relic cards — `public/relics/relic-01.png` … `relic-10.png` · 900×1200 (3:4)
+Collectible oracle cards. **Minimum 3–4 to start** (I use whatever exists and fall back
+gracefully). Full-bleed art, thin ornate gold-leaf inner border, **no text/numbers on the
+card** (I add the name in-app). Prepend each with:
+*"Oracle-style 3:4 portrait card, thin ornate gold-leaf inner border, SANDHYA house style,
+palette indigo/violet/rose/amber/gold, soft grain, no text, no numbers, no watermark —"*
+
+- `relic-01.png` *The Open Door in a Field* — a wooden door standing open and free-floating in a vast dawn meadow, golden light spilling through onto the grass, indigo sky, a few fading stars.
+- `relic-02.png` *The First Star Over the Anvil* — a blacksmith's anvil on dark ground at dusk, one bright silver star rising directly above it, faint ember glow at its base.
+- `relic-03.png` *The Ferryman's Lantern* — a small wooden boat on still dark water at pre-dawn, a warm lantern on its prow casting gold reflections, distant amber horizon.
+- `relic-04.png` *The Threshold Stone* — a weathered carved stone doorstep at an unseen home's entrance, first sunrise light grazing its worn surface, gold-leaf accents.
+- `relic-05.png` *The Blade Half-Drawn* — an elegant sword half-drawn from an ornate scabbard, warm light along the exposed steel, indigo-to-amber background.
+- `relic-06.png` *The Waxing Moon Over Water* — a luminous waxing gibbous moon reflected on calm night water, violet-indigo sky, a thin rose band at the horizon.
+- `relic-07.png` *The Cupped Hands of Dawn* — two open cupped hands lifted in offering, water and golden light pouring from them toward a rising sun, gentle and sacred.
+- `relic-08.png` *The Long Shadow Walking East* — a lone robed figure from behind walking toward a golden sunrise on a wide plain, long shadow trailing, hopeful.
+- `relic-09.png` *The Ember That Would Not Die* — a single glowing ember in grey ash in near-darkness, refusing to go out, a soft amber halo around it.
+- `relic-10.png` *The Sun Caught in the Doorframe* — a stone doorway framing a full golden sunrise perfectly within it, light flooding through onto a dark floor.
+
+### Scenes — `public/scenes/*.png` · 1080×1920 (9:16, full-screen)
+**Minimum: `threshold` + `day75`.** Full-bleed, no text.
+
+- `scenes/threshold.png` *(onboarding hero)* — a doorway of warm light standing alone in a dark pre-dawn field, deep indigo sky full of soft stars, a faint amber band at the horizon, an inviting path to the door.
+- `scenes/day25.png` *(First Twilight)* — the moment violet floods over indigo, a lone figure at a threshold looking east toward a thin rose line of dawn, hopeful.
+- `scenes/day50.png` *(High Crossing)* — a high bright sun near its zenith over a wide river, a small boat halfway across, warm and steady.
+- `scenes/day75.png` *(Emergence)* — a full golden sunrise clearing the horizon, a figure mid-stride walking through a doorway of light into full daylight, serene and triumphant.
+- `scenes/farewell.png` *(last KPIT day)* — an office door closing gently behind a small figure walking toward a warm dawn horizon across an open plain, cool office indigo giving way to gold ahead, bittersweet and peaceful.
 
 ---
 
-# TIER 4 — milestone & moment scenes · each 1080×1920 · 9:16 portrait (full-screen)
+## Priority
+1. `diya-lit`, `diya-unlit`, `bowl` — the sacred ritual moments (biggest win).
+2. 3–4 `relic` cards — makes the reward feel like treasure.
+3. `icon` — needed for a clean home-screen install.
+4. `blade-full`, `temple-full` — the Day-75 / Path payoff.
+5. `scenes/threshold` + `scenes/day75` — the emotional peaks.
 
-### `public/scenes/threshold.png` — onboarding hero
-> Full-screen 9:16 scene: a doorway of warm light standing alone in a dark pre-dawn field,
-> deep indigo sky full of soft stars with a faint amber band at the horizon, an inviting
-> path leading to the door. SANDHYA house style. No text, no watermark.
-
-### `public/scenes/day25.png` — Prātaḥ Sandhyā (First Twilight)
-> Full-screen 9:16 scene: the moment violet floods over indigo at first twilight, a lone
-> figure standing at a threshold looking east toward a thin rose line of dawn, hopeful.
-> SANDHYA house style. No text, no watermark.
-
-### `public/scenes/day50.png` — Mādhyāhnika (High Crossing)
-> Full-screen 9:16 scene: a high bright sun near its zenith over a wide river being crossed
-> by a small boat, halfway across, warm and clear and steady. SANDHYA house style. No text.
-
-### `public/scenes/day75.png` — Sāyaṁ Sandhyā (Emergence)
-> Full-screen 9:16 scene: a full golden sunrise clearing the horizon completely, a figure
-> mid-stride walking through a doorway of light into full daylight, triumphant but serene.
-> SANDHYA house style. No text, no watermark.
-
-### `public/scenes/farewell.png` — the last day at KPIT
-> Full-screen 9:16 scene: an office door closing gently behind a small figure who is walking
-> away toward a warm dawn horizon across an open plain, bittersweet and peaceful, cool
-> office indigo giving way to warm gold ahead. SANDHYA house style. No text, no watermark.
-
----
-
-# TIER 5 — optional texture (only if you want extra polish)
-
-### `public/texture/stars.png` — star overlay · 2048×2048 · **transparent background**
-> A field of soft, sparse white and pale-gold stars of varying sizes on a fully transparent
-> background, gently scattered, subtle, for overlaying on a dark sky. No nebula, no text.
-
-### `public/texture/grain.png` — paper grain · 1024×1024 · **transparent, very subtle**
-> A very subtle warm paper-grain / fine noise texture, semi-transparent, for overlaying to
-> add tactile warmth to flat gradients. Neutral warm tone, no pattern, no text.
-
----
-
-## Priority if you're short on time
-Do **Tier 1** first (icon, diya lit/unlit, bowl, 3 moods) — that alone lets me strip every
-emoji. Then Tier 3 relic cards (the most delightful), then Tier 2 artifacts, then Tier 4 scenes.
+I'll handle the 💌 threshold letter and the mood glyphs as inline SVG — no generation needed.
