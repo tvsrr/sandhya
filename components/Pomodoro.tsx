@@ -144,7 +144,8 @@ export default function Pomodoro({
 
   const bg = isForge
     ? "radial-gradient(circle at 50% 65%, #2a1206 0%, #120704 70%)"
-    : `radial-gradient(circle at 50% 60%, ${meta.tint}22 0%, #0e1030 70%)`;
+    // opaque base (#0b0e26) with a soft tinted glow — never see-through to the dashboard
+    : `radial-gradient(circle at 50% 58%, ${meta.tint}33 0%, rgba(11,14,38,0) 55%), #0b0e26`;
 
   // circular progress ring for non-forge focus
   const RING = 2 * Math.PI * 54;
