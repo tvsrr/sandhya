@@ -76,6 +76,18 @@ export function FlameMark({ size = 40, className = "" }: { size?: number; classN
   );
 }
 
+// The Journey — a compass / north-star.
+export function JourneyMark({ size = 40, className = "" }: { size?: number; className?: string }) {
+  return (
+    <svg width={size} height={size} viewBox="0 0 48 48" fill="none" className={className} aria-hidden>
+      <GoldDefs id="journeyg" />
+      <circle cx="24" cy="24" r="12" fill="none" stroke="#c9852f" strokeWidth="1" opacity="0.6" />
+      <path d="M24 9l3.2 11.8L39 24l-11.8 3.2L24 39l-3.2-11.8L9 24l11.8-3.2z" fill="url(#journeyg)" />
+      <circle cx="24" cy="24" r="2" fill="#fff8ee" />
+    </svg>
+  );
+}
+
 // The Path — a blade crossed with a temple spire.
 export function PathMark({ size = 40, className = "" }: { size?: number; className?: string }) {
   return (

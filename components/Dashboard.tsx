@@ -6,8 +6,9 @@ import { labelForProgress } from "@/lib/sky";
 import SkyBackground from "./SkyBackground";
 import SunArc from "./SunArc";
 import Door, { type DoorState } from "./Door";
-import { SunMark, AnvilMark, BookMark, PathMark, FlameMark } from "./Glyphs";
+import { SunMark, AnvilMark, BookMark, PathMark, FlameMark, JourneyMark } from "./Glyphs";
 import Bowl from "./Bowl";
+import TheJourney from "./TheJourney";
 import RoomShell from "./RoomShell";
 import Sheet from "./Sheet";
 import DehaCard from "./DehaCard";
@@ -22,7 +23,7 @@ import Settings from "./Settings";
 import Moments from "./Moments";
 import type { FocusTag } from "@/lib/types";
 
-type View = "sky" | "deha" | "karma" | "chitta" | "crossing";
+type View = "sky" | "deha" | "karma" | "chitta" | "crossing" | "journey";
 
 function doorState(count: number, total: number): DoorState {
   if (count >= total) return "lit";
@@ -134,14 +135,16 @@ export default function Dashboard() {
           />
         </div>
 
-        {/* two quiet emblems */}
-        <div className="flex items-center justify-between mt-auto pt-6 pb-4 text-white/55">
-          <button onClick={() => setPath(true)} className="flex items-center gap-1.5 text-xs tracking-wide active:scale-95">
-            <PathMark size={22} /> The Path
+        {/* three quiet emblems */}
+        <div className="grid grid-cols-3 items-center mt-auto pt-6 pb-4 text-white/55 text-xs tracking-wide">
+          <button onClick={() => setPath(true)} className="flex items-center gap-1.5 justify-start active:scale-95">
+            <PathMark size={20} /> Path
           </button>
-          <p className="text-[10px] text-white/25 font-serif italic">the threshold is the temple</p>
-          <button onClick={() => setView("crossing")} className="flex items-center gap-1.5 text-xs tracking-wide active:scale-95">
-            The Crossing <FlameMark size={22} />
+          <button onClick={() => setView("journey")} className="flex items-center gap-1.5 justify-center active:scale-95">
+            <JourneyMark size={20} /> Journey
+          </button>
+          <button onClick={() => setView("crossing")} className="flex items-center gap-1.5 justify-end active:scale-95">
+            Crossing <FlameMark size={20} />
           </button>
         </div>
       </main>
@@ -163,6 +166,8 @@ export default function Dashboard() {
         <DaysLit />
         <p className="text-center text-white/30 text-xs font-serif italic mt-6">The grind is the transformation.</p>
       </RoomShell>
+
+      <TheJourney open={view === "journey"} onClose={() => setView("sky")} />
 
       {/* ===================== SHEETS / OVERLAYS ===================== */}
       <Sheet open={moon} onClose={() => setMoon(false)}>
