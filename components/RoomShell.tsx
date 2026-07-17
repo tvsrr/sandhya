@@ -70,8 +70,8 @@ export default function RoomShell({
                   <span className="text-lg leading-none">⌄</span> return to the sky
                 </button>
                 <div className="text-right">
-                  <div className="text-white/90 text-sm tracking-wide">{title}</div>
-                  {subtitle && <div className="text-white/45 text-[11px]">{subtitle}</div>}
+                  <div className="text-white/90 font-serif text-lg leading-tight">{title}</div>
+                  {subtitle && <div className="text-white/45 text-[11px] italic font-serif">{subtitle}</div>}
                 </div>
               </div>
             </div>

@@ -14,7 +14,7 @@ export default function Door({
   status,
   onClick,
 }: {
-  glyph: string;
+  glyph: React.ReactNode;
   name: string;
   state: DoorState;
   status: string;
@@ -57,8 +57,14 @@ export default function Door({
       )}
 
       <span
-        className="relative text-3xl mt-1"
-        style={{ filter: lit ? "drop-shadow(0 0 8px rgba(255,180,90,0.8))" : stirring ? "none" : "grayscale(0.6) opacity(0.75)" }}
+        className="relative mt-1 flex items-center justify-center"
+        style={{
+          filter: lit
+            ? "drop-shadow(0 0 8px rgba(255,180,90,0.85))"
+            : stirring
+            ? "saturate(0.9)"
+            : "grayscale(0.85) opacity(0.5)",
+        }}
       >
         {glyph}
       </span>

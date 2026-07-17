@@ -8,8 +8,8 @@ const config: Config = {
   theme: {
     extend: {
       fontFamily: {
-        serif: ["Georgia", "Cambria", "Times New Roman", "serif"],
-        sans: ["ui-sans-serif", "system-ui", "-apple-system", "Segoe UI", "Roboto", "sans-serif"],
+        serif: ["var(--font-serif)", "Georgia", "Cambria", "serif"],
+        sans: ["var(--font-sans)", "ui-sans-serif", "system-ui", "-apple-system", "Segoe UI", "sans-serif"],
       },
       colors: {
         ember: "#ff8c42",

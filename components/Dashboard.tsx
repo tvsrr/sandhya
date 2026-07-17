@@ -6,6 +6,7 @@ import { labelForProgress } from "@/lib/sky";
 import SkyBackground from "./SkyBackground";
 import SunArc from "./SunArc";
 import Door, { type DoorState } from "./Door";
+import { SunMark, AnvilMark, BookMark, PathMark, FlameMark } from "./Glyphs";
 import Bowl from "./Bowl";
 import RoomShell from "./RoomShell";
 import Sheet from "./Sheet";
@@ -115,21 +116,21 @@ export default function Dashboard() {
         {/* three doors */}
         <div className="flex gap-2.5">
           <Door
-            glyph="🌅"
+            glyph={<SunMark size={38} />}
             name="DEHA"
             state={doorState(dehaCount, 2)}
             status={deha ? "offered" : dehaCount === 1 ? "1 of 2" : "at rest"}
             onClick={() => setView("deha")}
           />
           <Door
-            glyph="🔥"
+            glyph={<AnvilMark size={38} />}
             name="KARMA"
             state={doorState(karmaCount, 3)}
             status={karma ? "forged" : `${karmaCount} of 3`}
             onClick={() => setView("karma")}
           />
           <Door
-            glyph="📖"
+            glyph={<BookMark size={38} />}
             name="CHITTA"
             state={doorState(chittaCount, 3)}
             status={chitta ? "at peace" : `${chittaCount} of 3`}
@@ -138,13 +139,13 @@ export default function Dashboard() {
         </div>
 
         {/* two quiet emblems */}
-        <div className="flex items-center justify-between mt-auto pt-6 pb-4 text-white/60">
-          <button onClick={() => setPath(true)} className="flex items-center gap-2 text-xs active:scale-95">
-            <span className="text-base">⚔️</span> The Path
+        <div className="flex items-center justify-between mt-auto pt-6 pb-4 text-white/55">
+          <button onClick={() => setPath(true)} className="flex items-center gap-1.5 text-xs tracking-wide active:scale-95">
+            <PathMark size={22} /> The Path
           </button>
           <p className="text-[10px] text-white/25 font-serif italic">the threshold is the temple</p>
-          <button onClick={() => setView("crossing")} className="flex items-center gap-2 text-xs active:scale-95">
-            The Crossing <span className="text-base">🔥</span>
+          <button onClick={() => setView("crossing")} className="flex items-center gap-1.5 text-xs tracking-wide active:scale-95">
+            The Crossing <FlameMark size={22} />
           </button>
         </div>
       </main>
