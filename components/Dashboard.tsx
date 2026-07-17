@@ -1,10 +1,14 @@
 "use client";
 
 import { useState } from "react";
-import { useSandhya } from "@/lib/store";
+import { useSandhya, todayKey } from "@/lib/store";
 import { labelForProgress } from "@/lib/sky";
 import SkyBackground from "./SkyBackground";
 import SunArc from "./SunArc";
+import Door, { type DoorState } from "./Door";
+import Bowl from "./Bowl";
+import RoomShell from "./RoomShell";
+import Sheet from "./Sheet";
 import DehaCard from "./DehaCard";
 import KarmaCard from "./KarmaCard";
 import ChittaCard from "./ChittaCard";
@@ -17,25 +21,56 @@ import Settings from "./Settings";
 import Moments from "./Moments";
 import type { FocusTag } from "@/lib/types";
 
+type View = "sky" | "deha" | "karma" | "chitta" | "crossing";
+
+function doorState(count: number, total: number): DoorState {
+  if (count >= total) return "lit";
+  if (count > 0) return "stirring";
+  return "unlit";
+}
+
+// how much of this week's moon is held (for the mini-moon in the sky)
+function weekHeld(pillars: Record<string, "held" | "slipped">): number {
+  const now = new Date();
+  const dow = (now.getDay() + 6) % 7;
+  const monday = new Date(now);
+  monday.setDate(now.getDate() - dow);
+  let held = 0;
+  for (let i = 0; i < 7; i++) {
+    const d = new Date(monday);
+    d.setDate(monday.getDate() + i);
+    if (pillars[todayKey(d)] === "held") held++;
+  }
+  return held;
+}
+
 export default function Dashboard() {
   const { today, dayIndex, progress, segmentsToday, state, toggleSound } = useSandhya();
+  const [view, setView] = useState<View>("sky");
   const [focus, setFocus] = useState<{ open: boolean; tag: FocusTag }>({ open: false, tag: "cpp" });
   const [path, setPath] = useState(false);
   const [pour, setPour] = useState(false);
   const [settings, setSettings] = useState(false);
+  const [moon, setMoon] = useState(false);
   const openFocus = (tag: FocusTag) => setFocus({ open: true, tag });
 
-  const deha = today.gym && today.sandhya;
-  const karma = today.forgeHeats >= 1 && today.architect && today.leetSolved >= 2;
-  const chitta = today.pagesRead >= 20 && today.journal.trim().length > 0 && !!today.stress;
+  // completion (unchanged conditions)
+  const dehaCount = (today.gym ? 1 : 0) + (today.sandhya ? 1 : 0);
+  const karmaCount = (today.forgeHeats >= 1 ? 1 : 0) + (today.architect ? 1 : 0) + (today.leetSolved >= 2 ? 1 : 0);
+  const chittaCount = (today.pagesRead >= 20 ? 1 : 0) + (today.journal.trim().length > 0 ? 1 : 0) + (today.stress ? 1 : 0);
+  const deha = dehaCount === 2;
+  const karma = karmaCount === 3;
+  const chitta = chittaCount === 3;
   const allClosed = deha && karma && chitta;
+
+  const moonIllum = weekHeld(state.weekPillars) / 7;
 
   return (
     <>
       <SkyBackground progress={progress} segmentsToday={segmentsToday} />
 
-      <main className="min-h-screen max-w-md mx-auto px-4 safe-top safe-bottom">
-        {/* header */}
+      {/* ===================== HOME · THE SKY ===================== */}
+      <main className="min-h-screen max-w-md mx-auto px-4 safe-top safe-bottom flex flex-col">
         <header className="flex items-center justify-between py-3">
           <div>
             <h1 className="font-serif text-xl text-white tracking-wide ink-shadow">SANDHYA</h1>
@@ -51,52 +86,91 @@ export default function Dashboard() {
           </div>
         </header>
 
-        {/* the arc */}
-        <div className="mt-1 mb-3">
+        {/* the sky: arc hero + moon living in it */}
+        <div className="relative mt-2">
+          {/* the moon, top-right, at its waxing phase */}
+          <button
+            onClick={() => setMoon(true)}
+            className="absolute right-2 top-0 w-11 h-11 rounded-full bg-white/8 overflow-hidden border border-white/15"
+            aria-label="the moon — weekly pillars"
+          >
+            <div
+              className="absolute inset-0 bg-gradient-to-br from-amber-50 to-ghee"
+              style={{ clipPath: `inset(0 ${(1 - moonIllum) * 100}% 0 0)`, transition: "clip-path .5s ease" }}
+            />
+          </button>
+
           <SunArc dayIndex={dayIndex} deha={deha} karma={karma} chitta={chitta} />
         </div>
 
-        {/* pour the day */}
-        <button
-          onClick={() => setPour(true)}
-          className={`w-full rounded-2xl py-3 mb-4 border transition active:scale-[0.99] flex items-center justify-center gap-2 ${
-            today.poured
-              ? "bg-white/5 border-white/10 text-white/50"
-              : allClosed
-              ? "bg-gradient-to-r from-amber-400/30 to-orange-500/20 border-amber-200/50 text-amber-50 ember-glow"
-              : "bg-white/8 border-white/15 text-white/80"
-          }`}
-        >
-          <img src="/diya-lit.webp" alt="" className="h-5 w-auto" style={{ opacity: today.poured ? 0.5 : 1 }} />
-          {today.poured ? "The day is offered · rest now" : allClosed ? "All three closed — offer the day" : "Offer the day (Arghya)"}
-        </button>
+        <p className="text-center text-[11px] tracking-[0.25em] uppercase text-white/50 -mt-1 mb-3">
+          Dawn {dayIndex || "—"} of 75
+        </p>
 
-        {/* loops */}
-        <div className="space-y-4">
-          <DehaCard />
-          <KarmaCard onFocus={openFocus} onOpenPath={() => setPath(true)} />
-          <ChittaCard onFocus={() => openFocus("read")} />
-          <MoonWeek />
-          <DaysLit />
+        {/* the bowl on the horizon */}
+        <div className="mb-5">
+          <Bowl fill={segmentsToday / 3} full={allClosed} poured={today.poured} onClick={() => setPour(true)} />
         </div>
 
-        <footer className="text-center py-8">
-          <p className="text-white/40 text-xs font-serif italic">The grind is the transformation. 🔥</p>
-          <p className="text-white/25 text-[10px] mt-1">The threshold is the temple.</p>
-        </footer>
+        {/* three doors */}
+        <div className="flex gap-2.5">
+          <Door
+            glyph="🌅"
+            name="DEHA"
+            state={doorState(dehaCount, 2)}
+            status={deha ? "offered" : dehaCount === 1 ? "1 of 2" : "at rest"}
+            onClick={() => setView("deha")}
+          />
+          <Door
+            glyph="🔥"
+            name="KARMA"
+            state={doorState(karmaCount, 3)}
+            status={karma ? "forged" : `${karmaCount} of 3`}
+            onClick={() => setView("karma")}
+          />
+          <Door
+            glyph="📖"
+            name="CHITTA"
+            state={doorState(chittaCount, 3)}
+            status={chitta ? "at peace" : `${chittaCount} of 3`}
+            onClick={() => setView("chitta")}
+          />
+        </div>
+
+        {/* two quiet emblems */}
+        <div className="flex items-center justify-between mt-auto pt-6 pb-4 text-white/60">
+          <button onClick={() => setPath(true)} className="flex items-center gap-2 text-xs active:scale-95">
+            <span className="text-base">⚔️</span> The Path
+          </button>
+          <p className="text-[10px] text-white/25 font-serif italic">the threshold is the temple</p>
+          <button onClick={() => setView("crossing")} className="flex items-center gap-2 text-xs active:scale-95">
+            The Crossing <span className="text-base">🔥</span>
+          </button>
+        </div>
       </main>
 
-      {/* floating focus launcher */}
-      {!focus.open && !pour && (
-        <button
-          onClick={() => openFocus("cpp")}
-          className="fixed bottom-5 right-4 z-40 w-14 h-14 rounded-full bg-orange-500 text-white text-xl flex items-center justify-center ember-glow active:scale-95 transition"
-          aria-label="Focus timer"
-          style={{ marginBottom: "env(safe-area-inset-bottom)" }}
-        >
-          ▷
-        </button>
-      )}
+      {/* ===================== ROOMS ===================== */}
+      <RoomShell open={view === "deha"} title="DEHA · body" subtitle="first light" onClose={() => setView("sky")}>
+        <DehaCard />
+      </RoomShell>
+
+      <RoomShell open={view === "karma"} title="KARMA · craft" subtitle="the forge courtyard" onClose={() => setView("sky")}>
+        <KarmaCard onFocus={openFocus} onOpenPath={() => setPath(true)} />
+      </RoomShell>
+
+      <RoomShell open={view === "chitta"} title="CHITTA · mind" subtitle="golden hour" onClose={() => setView("sky")}>
+        <ChittaCard onFocus={() => openFocus("read")} />
+      </RoomShell>
+
+      <RoomShell open={view === "crossing"} title="The Crossing" subtitle="seventy-five dawns" onClose={() => setView("sky")}>
+        <DaysLit />
+        <p className="text-center text-white/30 text-xs font-serif italic mt-6">The grind is the transformation.</p>
+      </RoomShell>
+
+      {/* ===================== SHEETS / OVERLAYS ===================== */}
+      <Sheet open={moon} onClose={() => setMoon(false)}>
+        <MoonWeek />
+      </Sheet>
 
       <Pomodoro open={focus.open} initialTag={focus.tag} onClose={() => setFocus((f) => ({ ...f, open: false }))} />
       <Path open={path} onClose={() => setPath(false)} />
