@@ -4,8 +4,10 @@ import { useState } from "react";
 import { haptic } from "@/lib/audio";
 import { useSandhya } from "@/lib/store";
 import { CURRICULUM, trackProgress } from "@/lib/curriculum";
+import { AnvilMark, PathMark } from "./Glyphs";
 import type { FocusTag } from "@/lib/types";
 
+// KARMA — the forge courtyard: one hero (the Forge), a few smaller stations.
 export default function KarmaCard({ onFocus, onOpenPath }: { onFocus: (tag: FocusTag) => void; onOpenPath: () => void }) {
   const { today, patchToday, logLeet, state } = useSandhya();
   const [logging, setLogging] = useState(false);
@@ -16,125 +18,137 @@ export default function KarmaCard({ onFocus, onOpenPath }: { onFocus: (tag: Focu
     patchToday({ [key]: !today[key] } as any);
     haptic(8);
   };
-
   const doLog = (difficulty: "easy" | "medium" | "hard", usedHints: boolean) => {
     logLeet(difficulty, usedHints);
     haptic(10);
     setLogging(false);
   };
 
+  const StateDot = ({ on }: { on: boolean }) => (
+    <span
+      className={`w-4 h-4 rounded-full border flex items-center justify-center text-[9px] ${
+        on ? "bg-amber-300 border-amber-300 text-indigo-950" : "border-white/30 text-transparent"
+      }`}
+    >
+      ✓
+    </span>
+  );
+
   return (
-    <section className="card p-4">
-      <header className="mb-3">
-        <h3 className="text-white font-medium tracking-wide">☀️ KARMA · craft</h3>
-        <p className="text-white/50 text-xs">The 6-hour block, honored. Mentoring your replacement counts here too.</p>
-      </header>
+    <div className="pt-1 space-y-3.5">
+      {/* status + path */}
+      <div className="flex items-center justify-between">
+        <p className="text-[11px] text-white/45 font-serif italic">a heat · architect · two spars closes the day</p>
+        <button onClick={onOpenPath} className="flex items-center gap-1 text-[11px] text-amber-200/80 active:scale-95">
+          <PathMark size={14} /> walk the Path →
+        </button>
+      </div>
 
-      {/* The Path — curriculum tracker */}
-      <button
-        onClick={onOpenPath}
-        className="w-full rounded-2xl py-3 px-4 mb-2 flex items-center justify-between border border-white/15 bg-white/5 active:scale-[0.99] transition"
-      >
-        <div className="text-left">
-          <div className="text-sm text-white/90 font-medium">🗺 The Path — course map</div>
-          <div className="text-[11px] text-white/50">
-            Blade {Math.round(cppP.pct * 100)}% · Temple {Math.round(archP.pct * 100)}% — tap to check off lessons
-          </div>
-        </div>
-        <span className="text-white/70 text-sm">Open →</span>
-      </button>
-
-      {/* Forge */}
+      {/* HERO — the Forge */}
       <button
         onClick={() => onFocus("cpp")}
-        className="w-full rounded-2xl py-3 px-4 mb-2 flex items-center justify-between border border-orange-300/40 bg-gradient-to-r from-orange-500/20 to-orange-400/5 active:scale-[0.99] transition"
+        className="relative w-full rounded-3xl p-5 text-left overflow-hidden border border-orange-300/40 active:scale-[0.99] transition"
+        style={{
+          background: "linear-gradient(135deg, rgba(255,140,66,0.28) 0%, rgba(120,45,20,0.15) 100%)",
+          boxShadow: "0 0 30px rgba(255,120,50,0.18), inset 0 1px 0 rgba(255,210,150,0.25)",
+        }}
       >
-        <div className="text-left">
-          <div className="text-sm text-orange-50 font-medium">🔥 The Forge — C++ (Pomodoro)</div>
-          <div className="text-[11px] text-orange-200/60">
-            {today.forgeHeats} heats · {today.gritSparks} grit sparks today
-          </div>
-        </div>
-        <span className="text-orange-100/80 text-sm">Enter →</span>
-      </button>
-
-      <div className="flex gap-2 mb-2">
-        <button
-          onClick={() => toggle("architect")}
-          className={`flex-1 rounded-2xl py-3 px-3 flex items-center justify-between border transition active:scale-[0.99] ${
-            today.architect ? "bg-amber-300/15 border-amber-200/40" : "bg-white/5 border-white/15"
-          }`}
-        >
-          <span className="text-sm text-white/85">📐 Architect</span>
-          <span className="text-lg">{today.architect ? "✅" : "○"}</span>
-        </button>
-        <button
-          onClick={() => onFocus("arch")}
-          className="shrink-0 rounded-2xl px-4 border border-indigo-300/30 bg-indigo-400/10 text-indigo-50 text-sm active:scale-95"
-        >
-          ▷ focus
-        </button>
-      </div>
-
-      {/* Sparring ring — LeetCode */}
-      <div className="rounded-2xl border border-white/15 bg-white/5 p-3 mb-2">
-        <div className="flex items-center justify-between">
-          <div>
-            <div className="text-sm text-white/85">⚔️ Sparring · LeetCode</div>
-            <div className="text-[11px] text-white/50">
-              {today.leetSolved}/2 solved · Craft Rating <span className="text-amber-200 font-medium">{state.craftRating}</span>
+        <div className="pointer-events-none absolute -right-6 -top-6 w-32 h-32 rounded-full" style={{ background: "radial-gradient(circle, rgba(255,160,80,0.35), rgba(255,160,80,0) 70%)" }} />
+        <div className="relative flex items-center gap-3.5">
+          <AnvilMark size={44} />
+          <div className="flex-1">
+            <div className="text-orange-50 font-serif text-xl leading-tight">The Forge</div>
+            <div className="text-[11px] text-orange-200/70 mt-0.5">
+              C++ · {today.forgeHeats} heats · {today.gritSparks} sparks today
             </div>
           </div>
-          <div className="flex gap-1.5">
-            <button onClick={() => onFocus("leet")} className="text-xs px-3 py-1.5 rounded-full bg-emerald-400/15 border border-emerald-300/30 text-emerald-50 active:scale-95">
-              ▷ focus
-            </button>
+          <span className="text-orange-100/90 text-sm whitespace-nowrap">Light&nbsp;→</span>
+        </div>
+      </button>
+
+      {/* STATIONS */}
+      <div className="grid grid-cols-2 gap-3">
+        {/* Architect */}
+        <div
+          onClick={() => toggle("architect")}
+          className={`relative rounded-2xl p-3.5 h-28 flex flex-col justify-between border cursor-pointer active:scale-[0.98] transition ${
+            today.architect ? "bg-amber-300/12 border-amber-200/40" : "bg-white/5 border-white/12"
+          }`}
+        >
+          <div className="flex items-center justify-between">
+            <PathMark size={22} />
+            <StateDot on={today.architect} />
+          </div>
+          <div>
+            <div className="text-sm text-white/90">Architect</div>
             <button
-              onClick={() => setLogging((v) => !v)}
-              className="text-xs px-3 py-1.5 rounded-full bg-white/10 text-white/80 active:scale-95"
+              onClick={(e) => {
+                e.stopPropagation();
+                onFocus("arch");
+              }}
+              className="text-[10px] text-indigo-200/70 mt-0.5 active:scale-95"
             >
-              {logging ? "Cancel" : "Log a spar"}
+              ▷ focus a session
             </button>
           </div>
         </div>
 
-        {logging && (
-          <div className="mt-3 space-y-2">
-            <div className="text-[11px] text-white/50">Difficulty — solved clean, or with hints?</div>
-            {(["easy", "medium", "hard"] as const).map((d) => (
-              <div key={d} className="flex gap-2">
-                <button
-                  onClick={() => doLog(d, false)}
-                  className="flex-1 rounded-lg py-2 text-xs bg-emerald-400/15 border border-emerald-300/30 text-emerald-50 active:scale-95"
-                >
-                  {d} · clean
-                </button>
-                <button
-                  onClick={() => doLog(d, true)}
-                  className="flex-1 rounded-lg py-2 text-xs bg-white/8 border border-white/15 text-white/70 active:scale-95"
-                >
-                  {d} · used hints
-                </button>
-              </div>
-            ))}
+        {/* Sparring */}
+        <div
+          onClick={() => setLogging((v) => !v)}
+          className="relative rounded-2xl p-3.5 h-28 flex flex-col justify-between border border-white/12 bg-white/5 cursor-pointer active:scale-[0.98] transition"
+        >
+          <div className="flex items-center justify-between">
+            <span className="text-emerald-200/90 text-lg leading-none">⚔</span>
+            <span className="text-[11px] text-white/55">{today.leetSolved}/2</span>
           </div>
-        )}
+          <div>
+            <div className="text-sm text-white/90">Sparring</div>
+            <div className="text-[10px] text-white/50">
+              Craft <span className="text-amber-200 font-medium">{state.craftRating}</span> · {logging ? "close" : "log a spar"}
+            </div>
+          </div>
+        </div>
       </div>
 
-      <button
+      {/* log picker */}
+      {logging && (
+        <div className="rounded-2xl border border-white/12 bg-white/5 p-3 space-y-2">
+          <div className="text-[11px] text-white/50">Solved clean, or with hints?</div>
+          {(["easy", "medium", "hard"] as const).map((d) => (
+            <div key={d} className="flex gap-2">
+              <button onClick={() => doLog(d, false)} className="flex-1 rounded-lg py-2 text-xs bg-emerald-400/15 border border-emerald-300/30 text-emerald-50 active:scale-95">
+                {d} · clean
+              </button>
+              <button onClick={() => doLog(d, true)} className="flex-1 rounded-lg py-2 text-xs bg-white/8 border border-white/15 text-white/70 active:scale-95">
+                {d} · hints
+              </button>
+            </div>
+          ))}
+          <button onClick={() => onFocus("leet")} className="w-full rounded-lg py-2 text-xs bg-emerald-400/10 border border-emerald-300/25 text-emerald-100/80 active:scale-95">
+            ▷ focus a sparring session
+          </button>
+        </div>
+      )}
+
+      {/* KPIT — the old shore */}
+      <div
         onClick={() => toggle("kpit")}
-        className={`w-full rounded-2xl py-3 px-4 flex items-center justify-between border transition active:scale-[0.99] ${
-          today.kpit ? "bg-amber-300/15 border-amber-200/40" : "bg-white/5 border-white/15"
+        className={`rounded-2xl px-4 py-3 flex items-center justify-between border cursor-pointer active:scale-[0.99] transition ${
+          today.kpit ? "bg-amber-300/12 border-amber-200/40" : "bg-white/5 border-white/12"
         }`}
       >
-        <span className="text-sm text-white/85">🧭 KPIT maintenance (~2h) — meetings, mentoring, slides</span>
-        <span className="text-lg">{today.kpit ? "✅" : "○"}</span>
-      </button>
+        <div>
+          <div className="text-sm text-white/85">The old shore · KPIT</div>
+          <div className="text-[10px] text-white/45">~2h — meetings, mentoring, slides</div>
+        </div>
+        <StateDot on={today.kpit} />
+      </div>
 
-      <p className="text-[11px] text-white/40 mt-2">
-        Segment closes with a forge heat + architect + both spars. RAII isn&apos;t syntax — it&apos;s your first lesson in
-        systems that clean up after themselves.
+      <p className="text-[11px] text-white/40 pt-1">
+        RAII isn&apos;t syntax — it&apos;s your first lesson in systems that clean up after themselves. The two
+        apprenticeships are one.
       </p>
-    </section>
+    </div>
   );
 }

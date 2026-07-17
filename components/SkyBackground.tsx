@@ -54,22 +54,23 @@ export default function SkyBackground({
         ))}
       </div>
 
-      {/* the sun */}
+      {/* the sun — a warm horizon glow, kept low so it never haloes the UI */}
       <div
         className="absolute left-1/2"
         style={{
           bottom: sunBottom,
-          transform: "translateX(-50%)",
+          transform: "translateX(-50%) translateY(45%)",
           transition: "bottom 1.6s cubic-bezier(.22,1,.36,1)",
         }}
       >
         <div
           className="rounded-full"
           style={{
-            width: 130,
-            height: 130,
-            background: `radial-gradient(circle at 50% 45%, #fff6da 0%, ${sky.sunGlow} 45%, rgba(255,180,90,0) 72%)`,
-            filter: "blur(2px)",
+            width: 92,
+            height: 92,
+            background: "radial-gradient(circle at 50% 45%, rgba(255,246,218,0.75) 0%, rgba(255,177,90,0.4) 42%, rgba(255,180,90,0) 70%)",
+            filter: "blur(3px)",
+            opacity: 0.5 + progress * 0.4,
           }}
         />
       </div>

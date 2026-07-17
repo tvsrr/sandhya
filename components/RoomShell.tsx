@@ -28,7 +28,7 @@ export default function RoomShell({
         <motion.div
           key="room"
           className="fixed inset-0 z-40 flex flex-col"
-          style={{ background: "rgba(9,11,28,0.62)", backdropFilter: "blur(8px)", WebkitBackdropFilter: "blur(8px)" }}
+          style={{ background: "rgba(8,10,26,0.55)", backdropFilter: "blur(14px)", WebkitBackdropFilter: "blur(14px)" }}
           initial={{ opacity: 0 }}
           animate={{ opacity: 1 }}
           exit={{ opacity: 0 }}
@@ -36,6 +36,12 @@ export default function RoomShell({
         >
           <motion.div
             className="flex-1 flex flex-col min-h-0"
+            style={{
+              background: "linear-gradient(180deg, rgba(18,20,44,0.94) 0%, rgba(24,18,40,0.97) 100%)",
+              borderTopLeftRadius: 28,
+              borderTopRightRadius: 28,
+              boxShadow: "0 -12px 40px rgba(0,0,0,0.4)",
+            }}
             drag="y"
             dragControls={controls}
             dragListener={false}
@@ -47,10 +53,10 @@ export default function RoomShell({
                 onClose();
               }
             }}
-            initial={{ y: 40, scale: 0.96, opacity: 0 }}
-            animate={{ y: 0, scale: 1, opacity: 1 }}
-            exit={{ y: 30, scale: 0.97, opacity: 0 }}
-            transition={{ type: "spring", stiffness: 320, damping: 32 }}
+            initial={{ opacity: 0 }}
+            animate={{ opacity: 1 }}
+            exit={{ opacity: 0 }}
+            transition={{ duration: 0.24 }}
           >
             {/* grab handle / header — the only drag initiator */}
             <div
@@ -59,7 +65,7 @@ export default function RoomShell({
               onPointerDown={(e) => controls.start(e)}
             >
               <div className="mx-auto mb-3 h-1 w-10 rounded-full bg-white/25" />
-              <div className="flex items-center justify-between">
+              <div className="max-w-md mx-auto w-full flex items-center justify-between">
                 <button
                   onClick={() => {
                     haptic(6);
@@ -76,7 +82,9 @@ export default function RoomShell({
               </div>
             </div>
 
-            <div className="flex-1 min-h-0 overflow-y-auto px-4 pb-24 safe-bottom">{children}</div>
+            <div className="flex-1 min-h-0 overflow-y-auto px-4 pb-24 safe-bottom">
+              <div className="max-w-md mx-auto w-full">{children}</div>
+            </div>
           </motion.div>
         </motion.div>
       )}

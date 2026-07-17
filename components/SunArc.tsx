@@ -89,33 +89,14 @@ export default function SunArc({
         {/* the sun marker */}
         <circle cx={sun.x} cy={sun.y} r="14" fill="#fff6da" filter="url(#sunBlur)" opacity="0.9" />
         <circle cx={sun.x} cy={sun.y} r="7.5" fill="#fff" />
-
-        {/* segment labels */}
-        {segs.map((s) => {
-          const mid = polar((s.t0 + s.t1) / 2);
-          const ly = mid.y - 22;
-          return (
-            <text
-              key={s.key + "t"}
-              x={mid.x}
-              y={ly}
-              textAnchor="middle"
-              fontSize="11"
-              fontWeight="700"
-              letterSpacing="1"
-              fill={s.done ? "#ffe4b0" : "rgba(255,255,255,0.5)"}
-            >
-              {s.label}
-            </text>
-          );
-        })}
       </svg>
 
-      {/* center readout */}
-      <div className="absolute inset-x-0 bottom-1 flex flex-col items-center pointer-events-none">
-        <div className="text-5xl font-serif leading-none text-white ink-shadow">{dayIndex || "—"}</div>
-        <div className="text-[11px] tracking-widest uppercase text-white/70 mt-1">
-          {allClosed ? "day risen" : `day ${dayIndex} of 75`}
+      {/* center readout — names live on the doors below, so the arc stays clean */}
+      <div className="absolute inset-x-0 bottom-2 flex flex-col items-center pointer-events-none">
+        <div className="text-[10px] tracking-[0.35em] uppercase text-white/50">Day</div>
+        <div className="text-6xl font-serif leading-none text-white ink-shadow">{dayIndex || "—"}</div>
+        <div className="text-[10px] tracking-[0.3em] uppercase text-white/45 mt-1">
+          {allClosed ? "risen" : "of 75"}
         </div>
       </div>
     </div>

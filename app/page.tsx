@@ -32,13 +32,13 @@ function Onboarding() {
   const [letter, setLetter] = useState("");
 
   return (
-    <div className="relative min-h-screen flex flex-col" style={{ background: "linear-gradient(180deg,#121530 0%,#2a2350 55%,#5a3a52 100%)" }}>
+    <div className="relative min-h-screen flex flex-col" style={{ background: "#121530" }}>
       {/* threshold scene backdrop */}
-      <div className="fixed inset-0 -z-10">
-        <img src="/scenes/threshold.webp" alt="" className="w-full h-full object-cover opacity-60" />
-        <div className="absolute inset-0" style={{ background: "linear-gradient(180deg, rgba(18,21,48,0.5) 0%, rgba(18,21,48,0.35) 40%, rgba(30,20,40,0.85) 100%)" }} />
+      <div className="absolute inset-0 z-0">
+        <img src="/scenes/threshold.webp" alt="" className="w-full h-full object-cover opacity-80" />
+        <div className="absolute inset-0" style={{ background: "linear-gradient(180deg, rgba(18,21,48,0.45) 0%, rgba(18,21,48,0.3) 35%, rgba(24,18,38,0.9) 100%)" }} />
       </div>
-      <div className="flex-1 flex flex-col items-center justify-center px-6 max-w-md mx-auto w-full text-center">
+      <div className="relative z-10 flex-1 flex flex-col items-center justify-center px-6 max-w-md mx-auto w-full text-center">
         {step === 0 && (
           <div className="animate-[breathe_0.6s_ease]">
             <div className="flex justify-center mb-4"><SunMark size={64} /></div>

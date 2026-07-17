@@ -104,12 +104,8 @@ export default function Dashboard() {
           <SunArc dayIndex={dayIndex} deha={deha} karma={karma} chitta={chitta} />
         </div>
 
-        <p className="text-center text-[11px] tracking-[0.25em] uppercase text-white/50 -mt-1 mb-3">
-          Dawn {dayIndex || "—"} of 75
-        </p>
-
         {/* the bowl on the horizon */}
-        <div className="mb-5">
+        <div className="mb-5 mt-1">
           <Bowl fill={segmentsToday / 3} full={allClosed} poured={today.poured} onClick={() => setPour(true)} />
         </div>
 

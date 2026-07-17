@@ -99,7 +99,6 @@ const Ctx = createContext<SandhyaCtx | null>(null);
 export function SandhyaProvider({ children }: { children: React.ReactNode }) {
   const [state, setState] = useState<SandhyaState>(initialState);
   const [ready, setReady] = useState(false);
-  const loaded = useRef(false);
 
   // load once
   useEffect(() => {
@@ -112,19 +111,19 @@ export function SandhyaProvider({ children }: { children: React.ReactNode }) {
     } catch {
       /* ignore corrupt storage */
     }
-    loaded.current = true;
     setReady(true);
   }, []);
 
-  // persist
+  // persist — only after load has run, so the empty initial state is never
+  // written over saved data (gating on `ready` state, not a synchronous ref).
   useEffect(() => {
-    if (!loaded.current) return;
+    if (!ready) return;
     try {
       localStorage.setItem(STORAGE_KEY, JSON.stringify(state));
     } catch {
       /* storage full / private mode */
     }
-  }, [state]);
+  }, [state, ready]);
 
   const todayK = todayKey();
   const today = state.days[todayK] ?? emptyDay(todayK);
